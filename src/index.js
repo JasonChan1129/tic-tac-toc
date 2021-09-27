@@ -21,7 +21,7 @@ class Board extends React.Component {
         if (winnerObj) {
             if (winnerObj.line.filter(x => x === i).length === 1) {
                 return (
-                    <Square value={this.props.squares[i]} style={{backgroundColor: "green"}} onClick={() => this.props.onClick(i)}/>
+                    <Square value={this.props.squares[i]} style={{color: "green"}} onClick={() => this.props.onClick(i)}/>
                 )
             }
         }
@@ -43,8 +43,10 @@ class Board extends React.Component {
         }
 
         return (
-            <div className='game-board'>
-                {boardSquares}
+            <div className='container-gb'>
+                <div className='game-board'>
+                    {boardSquares}
+                </div>
             </div>
         )
     }
@@ -92,6 +94,16 @@ class Game extends React.Component {
         )
     }
 
+    playAgain() {
+        this.setState({
+            history: [{
+                squares: Array(9).fill(null),
+            }],
+            stepNumber: 0,
+            xIsNext: true,
+        })
+    }
+
     render() {
         const history = this.state.history;
         const current = history[this.state.stepNumber];
@@ -123,11 +135,17 @@ class Game extends React.Component {
 
         return (
             <div className='game'>
-                <div className='container'>
-                    <Board squares={current.squares} onClick = {(i) => this.handleClick(i)}/>
-                    <div className='game-info'>
-                        <h4>{status}</h4>
+                <Board squares={current.squares} onClick = {(i) => this.handleClick(i)}/>
+                <div className='game-info'>
+                    <div className='status'>
+                        <header>{status}</header>
+                    </div>
+                    <div className='game-history'>
+                        <header>Game history</header>
+                    </div>
+                    <div className='history'>
                         <ol>{moves}</ol>
+                        <ol><Button variant="outline-success" onClick = {() => this.playAgain()}>Play again!</Button></ol>
                     </div>
                 </div>
             </div>
